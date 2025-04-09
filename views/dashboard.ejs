@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Añade esto en tu barra de navegación o menú -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="/dashboard">SangreVital</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3 text-white">
+                Bienvenido, <%= user.primer_nombre || 'Usuario' %>
+                </span>
+                <a href="/logout" class="btn btn-outline-light">
+                Cerrar Sesión
+                </a>
+            </div>
+            </div>
+        </nav>
+        <h1>Bienvenido, <%= donante.primer_nombre %>!</h1>
+        <p>Tipo de sangre: <span class="badge bg-danger"><%= donante.tipo_sangre %></span></p>
+        <!-- Más datos del donante -->
+      </div>
+</body>
+</html>

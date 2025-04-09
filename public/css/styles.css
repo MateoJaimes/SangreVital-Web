@@ -1,0 +1,8 @@
+.btn-register {
+    background-color: #dc3545; /* Rojo de Bootstrap */
+    color: white;
+    transition: all 0.3s;
+}
+.btn-register:hover {
+    transform: scale(1.05);
+}
