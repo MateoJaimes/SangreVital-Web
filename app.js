@@ -11,14 +11,15 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // Única línea necesaria
 app.use(session({
-  secret: 'secreto',
+  secret: process.env.SESSION_SECRET || 'secreto', // Mejor usar variable de entorno
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { secure: false } // Para desarrollo, en producción debería ser true con HTTPS
 }));
 
-// Rutas de autenticación (incluye la raíz '/')
+// Rutas
 app.use('/', authRoutes);
 
 // Puerto
