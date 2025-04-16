@@ -15,8 +15,7 @@ exports.registerUser = async (req, res) => {
       [id_usuario, correo, contrasena]
     );
 
-    const nuevoUsuario = result.rows[0];
-    res.redirect(`/complete-profile/${nuevoUsuario.id_usuario}`);
+    res.redirect(`/complete-profile/${id_usuario}`);
   } catch (error) {
     console.error('Error en registerUser:', error);
     res.render('register', {
@@ -33,12 +32,12 @@ exports.showLoginForm = (req, res) => {
 
 // Procesar login de usuario
 exports.loginUser = async (req, res) => {
-  const { correo, contrasena } = req.body;
+  const { usuario_email, usuario_password } = req.body; // Cambiado para coincidir con el formulario
 
   try {
     const result = await db.query(
       'SELECT * FROM usuarios WHERE usuario_email = $1 AND usuario_password = $2',
-      [correo, contrasena]
+      [usuario_email, usuario_password]
     );
 
     if (result.rows.length === 0) {
@@ -48,7 +47,7 @@ exports.loginUser = async (req, res) => {
     const usuario = result.rows[0];
 
     const donanteResult = await db.query(
-      'SELECT * FROM donantes WHERE id_usuario = $1',
+      'SELECT * FROM donantes WHERE user_id = $1',
       [usuario.id_usuario]
     );
 
@@ -67,7 +66,7 @@ exports.loginUser = async (req, res) => {
 // Mostrar formulario para completar perfil
 exports.showCompleteProfileForm = (req, res) => {
   const { id } = req.params;
-  res.render('complete-profile', { userId: id });
+  res.render('complete-profile', { userId: id, error: null });
 };
 
 // Guardar datos del donante
@@ -82,12 +81,16 @@ exports.saveDonanteData = async (req, res) => {
       INSERT INTO donantes (
         user_id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
         tipo_sangre, fecha_nacimiento, direccion, telefono
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `, [
       user_id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
       tipo_sangre, fecha_nacimiento, direccion, telefono
     ]);
 
+    const result = await db.query('SELECT * FROM donantes WHERE user_id = $1', [user_id]);
+    const donante = result.rows[0];
+
+    req.session.donante = donante;
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Error guardando donante:', error);
@@ -98,13 +101,14 @@ exports.saveDonanteData = async (req, res) => {
   }
 };
 
-
-// Mostrar dashboard (dummy por ahora)
+// Mostrar dashboard
 exports.showDashboard = (req, res) => {
-  res.render('dashboard', { donante: null });
+  const donante = req.session.donante;
+  req.session.donante = null; // Para limpiar después de usar
+  res.render('dashboard', { donante });
 };
 
-// Cerrar sesión
+// Logout
 exports.logout = (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');

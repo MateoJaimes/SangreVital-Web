@@ -8,93 +8,522 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --sangre-primary: #dc3545;
+            --sangre-secondary: #f8d7da;
+            --sangre-dark: #c82333;
+            --sangre-light: #fff5f5;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        
         .hero-section {
             background: linear-gradient(rgba(220, 53, 69, 0.9), rgba(220, 53, 69, 0.8)), url('https://d100mj7v0l85u5.cloudfront.net/s3fs-public/2022-08/donacion-de-sangre.png');
             background-size: cover;
             background-position: center;
             min-height: 100vh;
             color: white;
+            position: relative;
         }
-        .btn-custom {
-            padding: 10px 25px;
-            font-weight: 600;
+        
+        .navbar-sangre {
+            background-color: transparent !important;
             transition: all 0.3s;
         }
+        
+        .navbar-sangre.scrolled {
+            background-color: var(--sangre-primary) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-custom {
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-radius: 50px;
+        }
+        
+        .btn-primary-custom {
+            background-color: white;
+            color: var(--sangre-primary);
+            border: 2px solid white;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: transparent;
+            color: white;
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-outline-custom:hover {
+            background-color: white;
+            color: var(--sangre-primary);
+        }
+        
         .feature-icon {
             font-size: 2.5rem;
-            color: #dc3545;
+            color: var(--sangre-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s;
+            height: 100%;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sangre-primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .blood-types-section {
+            background-color: var(--sangre-light);
+        }
+        
+        .blood-type {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--sangre-primary);
+            border: 2px solid var(--sangre-primary);
+            border-radius: 10px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: all 0.3s;
+        }
+        
+        .blood-type:hover {
+            background-color: var(--sangre-primary);
+            color: white;
+        }
+        
+        .testimonial-card {
+            border-left: 4px solid var(--sangre-primary);
+            border-radius: 8px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--sangre-primary);
+        }
+        
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .shape-1 {
+            top: 20%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            background-color: white;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+        
+        .shape-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-sangre fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="/">
+                <i class="bi bi-droplet-fill"></i> SangreVital
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#como-funciona">Cómo funciona</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tipos-sangre">Tipos de sangre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#centros">Centros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonios">Testimonios</a>
+                    </li>
+                </ul>
+                <div class="ms-lg-3 mt-3 mt-lg-0">
+                    <a href="/login" class="btn btn-outline-light btn-sm">Iniciar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
     <section class="hero-section d-flex align-items-center">
-        <div class="container">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        
+        <div class="container hero-content">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-3 fw-bold mb-4">
+                    <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">
                         <i class="bi bi-droplet-fill"></i> SangreVital
                     </h1>
-                    <p class="lead mb-5">Tu donación puede salvar hasta 3 vidas. Únete a nuestra comunidad de héroes anónimos.</p>
+                    <p class="lead mb-5 fs-4 animate__animated animate__fadeIn animate__delay-1s">
+                        Tu donación puede salvar hasta <span class="fw-bold">3 vidas</span>. Únete a nuestra comunidad de héroes anónimos.
+                    </p>
                     
                     <!-- Botones principales -->
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                        <a href="/register" class="btn btn-light btn-custom btn-lg">
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center animate__animated animate__fadeIn animate__delay-2s">
+                        <a href="/register" class="btn btn-light btn-custom btn-lg btn-primary-custom">
                             <i class="bi bi-person-plus"></i> Regístrate como Donante
                         </a>
-                        <a href="/login" class="btn btn-outline-light btn-custom btn-lg">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        <a href="#como-funciona" class="btn btn-outline-light btn-custom btn-lg btn-outline-custom">
+                            <i class="bi bi-info-circle"></i> Saber más
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-white">
+        <div class="container py-4">
+            <div class="row g-4">
+                <div class="col-md-3 col-6 text-center">
+                    <div class="stats-number">5,000+</div>
+                    <p class="mb-0">Donantes activos</p>
+                </div>
+                <div class="col-md-3 col-6 text-center">
+                    <div class="stats-number">15,000+</div>
+                    <p class="mb-0">Vidas salvadas</p>
+                </div>
+                <div class="col-md-3 col-6 text-center">
+                    <div class="stats-number">50+</div>
+                    <p class="mb-0">Centros asociados</p>
+                </div>
+                <div class="col-md-3 col-6 text-center">
+                    <div class="stats-number">24/7</div>
+                    <p class="mb-0">Disponibilidad</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="py-5 bg-light">
+    <section id="como-funciona" class="py-5 bg-light">
         <div class="container py-5">
-            <div class="row text-center">
-                <div class="col-md-4 mb-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-heart-pulse"></i>
+            <h2 class="text-center section-title">¿Cómo funciona?</h2>
+            <p class="text-center lead mb-5">El proceso de donación es simple, seguro y salva vidas</p>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-clipboard2-pulse"></i>
+                        </div>
+                        <h3>1. Registro</h3>
+                        <p>Completa un breve formulario y revisión médica inicial para asegurar que cumples con los requisitos.</p>
                     </div>
-                    <h3>Salva Vidas</h3>
-                    <p>Cada donación puede ayudar a pacientes con cáncer, cirugías o emergencias.</p>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-clock-history"></i>
+                <div class="col-md-4">
+                    <div class="feature-card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-droplet"></i>
+                        </div>
+                        <h3>2. Donación</h3>
+                        <p>El proceso de extracción toma solo 8-10 minutos. Usamos materiales estériles y desechables.</p>
                     </div>
-                    <h3>Rápido y Seguro</h3>
-                    <p>El proceso completo toma menos de 1 hora y usamos materiales estériles.</p>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-award"></i>
+                <div class="col-md-4">
+                    <div class="feature-card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-gift"></i>
+                        </div>
+                        <h3>3. Recompensa</h3>
+                        <p>Recibe un refrigerio, análisis médico gratuito y puntos canjeables por beneficios exclusivos.</p>
                     </div>
-                    <h3>Beneficios</h3>
-                    <p>Recibe un análisis médico gratuito y puntos canjeables por beneficios.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Blood Types Section -->
+    <section id="tipos-sangre" class="blood-types-section py-5">
+        <div class="container py-5">
+            <h2 class="text-center section-title">Tipos de Sangre</h2>
+            <p class="text-center lead mb-5">Todos los tipos sanguíneos son necesarios</p>
+            
+            <div class="row g-4">
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">A+</div>
+                    <small>34% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">A-</div>
+                    <small>6% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">B+</div>
+                    <small>9% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">B-</div>
+                    <small>2% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">O+</div>
+                    <small>38% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">O-</div>
+                    <small>7% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">AB+</div>
+                    <small>3% población</small>
+                </div>
+                <div class="col-md-2 col-4 text-center">
+                    <div class="blood-type">AB-</div>
+                    <small>1% población</small>
+                </div>
+            </div>
+            
+            <div class="alert alert-danger mt-5 text-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Los tipos O- y AB+ son especialmente necesarios.</strong> O- es el donante universal y AB+ el receptor universal.
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Centers -->
+    <section id="centros" class="py-5 bg-white">
+        <div class="container py-5">
+            <h2 class="text-center section-title">Centros de Donación</h2>
+            <p class="text-center lead mb-5">Encuentra el centro más cercano a ti</p>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Centro Principal</h4>
+                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Av. Principal 123, Ciudad</p>
+                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Lunes a Viernes: 8AM - 6PM</p>
+                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7890</p>
+                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Hospital Central</h4>
+                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Calle Secundaria 456, Ciudad</p>
+                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Lunes a Sábado: 7AM - 7PM</p>
+                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7891</p>
+                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Clínica Norte</h4>
+                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Av. Norte 789, Ciudad</p>
+                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Martes a Domingo: 9AM - 5PM</p>
+                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7892</p>
+                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-danger">Ver todos los centros</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonios" class="py-5 bg-light">
+        <div class="container py-5">
+            <h2 class="text-center section-title">Testimonios</h2>
+            <p class="text-center lead mb-5">Lo que dicen nuestros donantes</p>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-person-fill text-danger"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Carlos M.</h5>
+                                <small class="text-muted">Donante frecuente</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Llevo 15 donaciones con SangreVital. La atención es excelente y saber que estoy ayudando a salvar vidas me motiva a seguir donando."</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-person-fill text-danger"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Ana L.</h5>
+                                <small class="text-muted">Primera donación</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Tenía miedo de donar por primera vez, pero el personal me hizo sentir muy cómoda. El proceso fue rápido y sin dolor. ¡Volveré!"</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-person-fill text-danger"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Familia Pérez</h5>
+                                <small class="text-muted">Receptores</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Gracias a los donantes de SangreVital, nuestro hijo recibió la transfusión que necesitaba durante su cirugía. Son verdaderos héroes."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-danger text-white">
+        <div class="container py-4 text-center">
+            <h2 class="mb-4">¿Listo para convertirte en un héroe?</h2>
+            <p class="lead mb-4">Regístrate ahora y comienza a salvar vidas con tu donación</p>
+            <a href="/register" class="btn btn-light btn-lg px-5">
+                <i class="bi bi-person-plus"></i> Regístrate Ahora
+            </a>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0">© 2023 SangreVital - Todos los derechos reservados</p>
-            <p class="mb-0">
-                <small>
-                    <a href="#" class="text-white">Términos de servicio</a> | 
-                    <a href="#" class="text-white">Política de privacidad</a>
-                </small>
-            </p>
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="text-danger mb-3">
+                        <i class="bi bi-droplet-fill"></i> SangreVital
+                    </h4>
+                    <p>Conectando donantes con pacientes que necesitan transfusiones desde 2023. Tu sangre puede ser la diferencia entre la vida y la muerte.</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Inicio</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Cómo donar</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Requisitos</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Centros</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Preguntas frecuentes</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h5>Contacto</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i> contacto@sangrevital.com</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> (123) 456-7890</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> Av. Principal 123, Ciudad</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5>Legal</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Términos de servicio</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Política de privacidad</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Aviso legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0 small">© 2023 SangreVital - Todos los derechos reservados</p>
+            </div>
         </div>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-sangre');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

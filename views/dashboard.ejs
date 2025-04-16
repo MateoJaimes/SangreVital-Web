@@ -1,29 +1,319 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SangreVital - Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --sangre-primary: #dc3545;
+            --sangre-secondary: #f8d7da;
+            --sangre-dark: #c82333;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-sangre {
+            background-color: var(--sangre-primary) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-card {
+            background: linear-gradient(rgba(220, 53, 69, 0.9), rgba(220, 53, 69, 0.8)), url('https://d100mj7v0l85u5.cloudfront.net/s3fs-public/2022-08/donacion-de-sangre.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: none;
+            transition: transform 0.3s;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .blood-badge {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+        
+        .stats-card {
+            border-left: 5px solid var(--sangre-primary);
+            border-radius: 8px;
+        }
+        
+        .btn-sangre {
+            background-color: var(--sangre-primary);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-sangre:hover {
+            background-color: var(--sangre-dark);
+            color: white;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--sangre-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .donation-progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--sangre-primary);
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--sangre-primary);
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Añade esto en tu barra de navegación o menú -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
-            <div class="container-fluid">
-            <a class="navbar-brand" href="/dashboard">SangreVital</a>
-            <div class="d-flex">
-                <span class="navbar-text me-3 text-white">
-                Bienvenido, <%= user.primer_nombre || 'Usuario' %>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-sangre sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/dashboard">
+                <i class="bi bi-droplet-fill"></i> SangreVital
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/donation-centers">Centros de Donación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/appointments">Mis Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rewards">Recompensas</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="navbar-text me-3 text-white">
+                        <i class="bi bi-person-circle me-2"></i>Bienvenido, <%= donante.primer_nombre || 'Donante' %>
+                    </span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Hero Welcome Card -->
+        <div class="hero-card p-4 p-md-5 mb-5 text-center">
+            <h1 class="display-4 fw-bold mb-3">¡Bienvenido, Héroe!</h1>
+            <p class="lead mb-4">Gracias por ser parte de nuestra comunidad de donantes. Tu sangre salva vidas.</p>
+            <div class="d-flex justify-content-center align-items-center">
+                <span class="badge bg-white text-danger blood-badge me-3">
+                    <i class="bi bi-droplet"></i> Grupo <%= donante.tipo_sangre %>
                 </span>
-                <a href="/logout" class="btn btn-outline-light">
-                Cerrar Sesión
+                <a href="/schedule-appointment" class="btn btn-light btn-lg">
+                    <i class="bi bi-calendar-plus"></i> Agendar Donación
                 </a>
             </div>
+        </div>
+
+        <div class="row">
+            <!-- Profile Column -->
+            <div class="col-lg-4 mb-4">
+                <div class="profile-card bg-white p-4 h-100">
+                    <div class="text-center mb-4">
+                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-heart feature-icon"></i>
+                        </div>
+                        <h3 class="mt-3 mb-0"><%= donante.primer_nombre %> <%= donante.primer_apellido %></h3>
+                        <p class="text-muted">Donante desde 2023</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Información Personal</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-envelope me-2 text-danger"></i> <%= donante.usuario_email %></li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2 text-danger"></i> <%= donante.telefono %></li>
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2 text-danger"></i> <%= donante.direccion %></li>
+                        <li class="mb-2"><i class="bi bi-calendar me-2 text-danger"></i> <%= donante.fecha_nacimiento %></li>
+                    </ul>
+                    
+                    <a href="/edit-profile" class="btn btn-sangre w-100 mt-3">
+                        <i class="bi bi-pencil-square"></i> Editar Perfil
+                    </a>
+                </div>
             </div>
-        </nav>
-        <h1>Bienvenido, <%= donante.primer_nombre %>!</h1>
-        <p>Tipo de sangre: <span class="badge bg-danger"><%= donante.tipo_sangre %></span></p>
-        <!-- Más datos del donante -->
-      </div>
+            
+            <!-- Main Content Column -->
+            <div class="col-lg-8">
+                <!-- Stats Row -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="stats-card bg-white p-3 h-100">
+                            <h6 class="text-muted">DONACIONES</h6>
+                            <h2 class="fw-bold text-danger">3</h2>
+                            <p class="mb-0"><small>Vidas salvadas: <strong>9</strong></small></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="stats-card bg-white p-3 h-100">
+                            <h6 class="text-muted">PRÓXIMA DONACIÓN</h6>
+                            <h2 class="fw-bold text-danger">15 días</h2>
+                            <p class="mb-0"><small>Disponible a partir del 15/11/2023</small></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="stats-card bg-white p-3 h-100">
+                            <h6 class="text-muted">PUNTOS</h6>
+                            <h2 class="fw-bold text-danger">450</h2>
+                            <p class="mb-0"><small>Canjeables por recompensas</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Next Donation Card -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0"><i class="bi bi-calendar-check me-2 text-danger"></i>Próxima Cita</h5>
+                            <span class="badge bg-danger">Confirmada</span>
+                        </div>
+                        
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="bi bi-hospital me-2"></i> <strong>Centro de Donación Central</strong></p>
+                                <p class="mb-1"><i class="bi bi-geo-alt me-2"></i> Av. Principal 123, Ciudad</p>
+                                <p class="mb-1"><i class="bi bi-clock me-2"></i> 10:00 AM - 25 Nov 2023</p>
+                            </div>
+                            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                <button class="btn btn-outline-danger me-2">Cancelar</button>
+                                <button class="btn btn-sangre">Recordatorio</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Donation Progress -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3"><i class="bi bi-graph-up me-2 text-danger"></i>Tu Progreso</h5>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Donaciones este año</span>
+                                <span>2/4</span>
+                            </div>
+                            <div class="progress donation-progress">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-danger bg-opacity-10 border-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> 
+                            ¡Faltan 2 donaciones para alcanzar tu meta anual!
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rewards Section -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0"><i class="bi bi-award me-2 text-danger"></i>Tus Recompensas</h5>
+                            <a href="/rewards" class="text-danger">Ver todas</a>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="border rounded p-3 text-center">
+                                    <i class="bi bi-cup-straw feature-icon"></i>
+                                    <h6>Café Gratis</h6>
+                                    <p class="text-muted small">200 puntos</p>
+                                    <button class="btn btn-sangre btn-sm">Canjear</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="border rounded p-3 text-center">
+                                    <i class="bi bi-ticket-perforated feature-icon"></i>
+                                    <h6>Entrada Cine</h6>
+                                    <p class="text-muted small">350 puntos</p>
+                                    <button class="btn btn-sangre btn-sm">Canjear</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="border rounded p-3 text-center">
+                                    <i class="bi bi-bag feature-icon"></i>
+                                    <h6>Descuento 20%</h6>
+                                    <p class="text-muted small">150 puntos</p>
+                                    <button class="btn btn-sangre btn-sm">Canjear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5><i class="bi bi-droplet-fill text-danger"></i> SangreVital</h5>
+                    <p class="small">Conectando donantes con quienes más lo necesitan desde 2023.</p>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-white text-decoration-none">Centros de donación</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Requisitos</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Preguntas frecuentes</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contacto</h5>
+                    <ul class="list-unstyled small">
+                        <li><i class="bi bi-envelope me-2"></i> contacto@sangrevital.com</li>
+                        <li><i class="bi bi-phone me-2"></i> +1 234 567 890</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center small">
+                <p class="mb-0">© 2023 SangreVital - Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

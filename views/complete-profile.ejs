@@ -19,18 +19,16 @@
             </h4>
           </div>
           <div class="card-body">
+
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
             <form action="/complete-profile" method="POST">
-
               <!-- Campo oculto para el ID del usuario -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="user_id" class="form-label">Numero de documento</label>
-                  <input type="text" class="form-control" id="user_id" name="user_id" required>
-                </div>
-              </div>
+              <input type="hidden" name="user_id" value="<%= userId %>">
 
               <div class="row mb-3">
-                
                 <div class="col">
                   <label for="primer_nombre" class="form-label">First Name</label>
                   <input type="text" class="form-control" id="primer_nombre" name="primer_nombre" required>
