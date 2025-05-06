@@ -24,26 +24,26 @@
 
             <form action="/register" method="POST" class="auth-form" id="registerForm">
                 <div class="form-group">
-                    <label for="id_usuario" class="form-label">Documento de Identidad*</label>
+                    <label for="id" class="form-label">Documento de Identidad*</label>
                     <input 
                         type="text" 
                         class="form-control" 
-                        id="id_usuario" 
-                        name="id_usuario"
-                        value="<%= formData && formData.id_usuario ? formData.id_usuario : '' %>"
+                        id="id" 
+                        name="id"
+                        value="<%= formData && formData.id ? formData.id : '' %>"
                         required
                     >
                 </div>
 
                 <div class="form-group">
-                    <label for="correo" class="form-label">Correo Electrónico*</label>
+                    <label for="email" class="form-label">Correo Electrónico*</label>
                     <div class="input-with-icon">
                         <input
                             type="email"
                             class="form-control"
-                            id="correo"
-                            name="correo"
-                            value="<%= formData && formData.correo ? formData.correo : '' %>"
+                            id="email"
+                            name="email"
+                            value="<%= formData && formData.email ? formData.email : '' %>"
                             required
                         >
                         <i class="bi bi-envelope"></i>
@@ -51,13 +51,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="contrasena" class="form-label">Contraseña*</label>
+                    <label for="password" class="form-label">Contraseña*</label>
                     <div class="input-with-icon">
                         <input
                             type="password"
                             class="form-control"
-                            id="contrasena"
-                            name="contrasena"
+                            id="password"
+                            name="password"
                             required
                             minlength="8"
                         >
@@ -76,6 +76,10 @@
 
             <div class="auth-footer">
                 ¿Ya tienes una cuenta? <a href="/login" class="auth-link">Inicia sesión</a>
+                <br>
+                <a href="/" class="btn btn-secondary mt-2">
+                    <i class="bi bi-arrow-left"></i> Regresar al Inicio
+                </a>
             </div>
         </div>
     </div>
@@ -83,7 +87,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Validación de contraseña
-        document.getElementById('contrasena').addEventListener('input', function() {
+        document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
             const strengthBar = document.getElementById('strengthBar');
             let strength = 0;
@@ -106,7 +110,7 @@
 
         // Validación del formulario
         document.getElementById('registerForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('contrasena').value;
+            const password = document.getElementById('password').value;
             if (password.length < 8) {
                 e.preventDefault();
                 alert('La contraseña debe tener al menos 8 caracteres');

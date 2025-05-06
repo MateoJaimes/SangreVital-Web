@@ -1,7 +1,7 @@
 // middlewares/authMiddleware.js
-exports.isAuthenticated = (req, res, next) => {
-  if (!req.session.userId) {
-    return res.redirect('/login');
+module.exports.isAuthenticated = (req, res, next) => {
+  if (req.session && req.session.donor) {
+    return next();
   }
-  next();
+  res.redirect('/login');
 };

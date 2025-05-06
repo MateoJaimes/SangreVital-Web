@@ -11,8 +11,7 @@
 <body class="auth-page">
     <div class="auth-card">
         <div class="auth-header">
-            <h2><i class="bi bi-droplet-fill"></i> SangreVital</h2>
-            <p>Iniciar Sesión</p>
+            <h2>Iniciar Sesión</h2>
         </div>
         
         <div class="auth-body">
@@ -25,27 +24,27 @@
 
             <form action="/login" method="POST" class="auth-form">
                 <div class="form-group">
-                    <label for="usuario_email" class="form-label">Correo Electrónico</label>
+                    <label for="id" class="form-label">Número de Documento</label>
                     <div class="input-with-icon">
                         <input 
-                            type="email" 
+                            type="text" 
                             class="form-control" 
-                            id="usuario_email" 
-                            name="usuario_email" 
+                            id="id" 
+                            name="id" 
                             required
                         >
-                        <i class="bi bi-envelope"></i>
+                        <i class="bi bi-person-badge"></i>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="usuario_password" class="form-label">Contraseña</label>
+                    <label for="password" class="form-label">Contraseña</label>
                     <div class="input-with-icon">
                         <input 
                             type="password" 
                             class="form-control" 
-                            id="usuario_password" 
-                            name="usuario_password" 
+                            id="password" 
+                            name="password" 
                             required
                         >
                         <i class="bi bi-lock"></i>
@@ -59,6 +58,10 @@
 
             <div class="auth-footer">
                 ¿No tienes una cuenta? <a href="/register" class="auth-link">Regístrate</a>
+                <br>
+                <a href="/" class="btn btn-secondary mt-2">
+                    <i class="bi bi-arrow-left"></i> Regresar al Inicio
+                </a>
             </div>
         </div>
     </div>

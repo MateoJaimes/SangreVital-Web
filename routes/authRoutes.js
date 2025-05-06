@@ -21,7 +21,7 @@ router.get('/logout', authController.logout);
 router.get('/dashboard', isAuthenticated, authController.showDashboard);
 
 // Completar perfil (en inglés)
-router.get('/complete-profile/:id', authController.showCompleteProfileForm);
-router.post('/complete-profile', authController.saveDonanteData);
+router.get('/complete-profile/:id', isAuthenticated, authController.showCompleteProfileForm);
+router.post('/complete-profile', isAuthenticated, authController.saveDonanteData);
 
 module.exports = router;

@@ -16,7 +16,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'secreto', // Mejor usar variable de entorno
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // Para desarrollo, en producción debería ser true con HTTPS
+  cookie: { secure: false } // Cambiar a true en producción con HTTPS
 }));
 
 // Rutas
