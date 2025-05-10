@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const bcrypt = require('bcrypt'); // Importar bcrypt
+const bcrypt = require('bcrypt');
 
 // Mostrar formulario de registro
 exports.showRegisterForm = (req, res) => {
@@ -10,7 +10,6 @@ exports.showRegisterForm = (req, res) => {
 exports.registerUser = async (req, res) => {
   const { id, email, password } = req.body;
 
-  // Validar contraseña
   if (!password || password.length < 8) {
     return res.render('register', {
       error: 'La contraseña debe tener al menos 8 caracteres.',
@@ -19,17 +18,14 @@ exports.registerUser = async (req, res) => {
   }
 
   try {
-    // Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insertar en user_credentials
     await db.query(
       `INSERT INTO user_credentials (id, email, password) 
        VALUES (UPPER($1), UPPER($2), $3)`,
       [id, email, hashedPassword]
     );
 
-    // Insertar en donors
     await db.query(
       `INSERT INTO donors (id, first_name, last_name, blood_type, address, city, birth_date) 
        VALUES (UPPER($1), '', '', '', '', '', CURRENT_DATE)`,
@@ -39,12 +35,10 @@ exports.registerUser = async (req, res) => {
     res.redirect(`/complete-profile/${id}`);
   } catch (error) {
     console.error('Error en registerUser:', error);
-
     const errorMessage =
       error.code === '23505'
         ? 'El usuario ya está registrado.'
         : 'Error al registrar el usuario. Verifica los datos.';
-
     res.render('register', {
       error: errorMessage,
       formData: req.body,
@@ -72,15 +66,18 @@ exports.loginUser = async (req, res) => {
     }
 
     const user = result.rows[0];
-
-    // Verificar la contraseña
     const passwordMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordMatch) {
       return res.render('login', { error: 'Credenciales incorrectas' });
     }
 
+    // Combinar datos de user_credentials y donors
     const donorResult = await db.query(
-      'SELECT * FROM donors WHERE id = $1',
+      `SELECT d.*, uc.email 
+       FROM donors d 
+       JOIN user_credentials uc ON d.id = uc.id 
+       WHERE d.id = $1`,
       [id]
     );
 
@@ -89,7 +86,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const donor = donorResult.rows[0];
-    req.session.donor = donor; // Asegúrate de guardar el donante en la sesión
+    req.session.donor = donor;
 
     if (!donor.first_name || !donor.blood_type) {
       return res.redirect(`/complete-profile/${donor.id}`);
@@ -108,7 +105,7 @@ exports.showCompleteProfileForm = (req, res) => {
   res.render('complete-profile', { userId: id, error: null });
 };
 
-// Guardar datos del donante (completar perfil)
+// Guardar datos del donante
 exports.saveDonanteData = async (req, res) => {
   const {
     id, first_name, second_name, last_name, second_last_name,
@@ -126,9 +123,7 @@ exports.saveDonanteData = async (req, res) => {
     );
 
     const result = await db.query('SELECT * FROM donors WHERE id = $1', [id]);
-    const donor = result.rows[0];
-
-    req.session.donor = donor;
+    req.session.donor = result.rows[0];
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Error guardando donante:', error);
@@ -139,11 +134,46 @@ exports.saveDonanteData = async (req, res) => {
   }
 };
 
-// Mostrar dashboard
+// Mostrar dashboard (sin borrar sesión)
 exports.showDashboard = (req, res) => {
   const donor = req.session.donor;
-  req.session.donor = null; // Para limpiar después de usar
   res.render('dashboard', { donor });
+};
+
+// Mostrar formulario de edición de perfil
+exports.showEditProfileForm = (req, res) => {
+  const donor = req.session.donor;
+  if (!donor) return res.redirect('/login');
+  res.render('edit-profile', { donor, error: null });
+};
+
+// Procesar edición del perfil
+exports.updateProfile = async (req, res) => {
+  const {
+    id, first_name, second_name, last_name, second_last_name,
+    blood_type, birth_date, address, city
+  } = req.body;
+
+  try {
+    await db.query(`UPDATE donors SET
+        first_name = UPPER($1), second_name = UPPER($2), last_name = UPPER($3), 
+        second_last_name = UPPER($4), blood_type = UPPER($5), 
+        birth_date = $6, address = UPPER($7), city = UPPER($8),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = UPPER($9)`,
+      [first_name, second_name, last_name, second_last_name, blood_type, birth_date, address, city, id]
+    );
+
+    const result = await db.query('SELECT * FROM donors WHERE id = $1', [id]);
+    req.session.donor = result.rows[0];
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Error actualizando perfil:', error);
+    res.render('edit-profile', {
+      donor: req.body,
+      error: 'Error al actualizar el perfil.'
+    });
+  }
 };
 
 // Logout

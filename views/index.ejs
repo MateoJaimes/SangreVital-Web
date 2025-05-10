@@ -9,11 +9,11 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/auth.css">
 </head>
-<body>
+<body style="font-family: 'Montserrat', sans-serif;">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-sangre fixed-top py-3">
         <div class="container">
@@ -48,22 +48,23 @@
         </div>
     </nav>
 
+
     <!-- Hero Section -->
     <section class="hero-section d-flex align-items-center">
         <div class="floating-shape shape-1"></div>
         <div class="floating-shape shape-2"></div>
-        
+       
         <div class="container hero-content">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
                     <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">
-                        <img src="/images/logo2.png" alt=""  width="170"> 
+                        <img src="/images/logo2.png" alt=""  width="170">
                         <br>SangreVital
                     </h1>
                     <p class="lead mb-5 fs-4 animate__animated animate__fadeIn animate__delay-1s">
                         Tu donación puede salvar hasta <span class="fw-bold">3 vidas</span>. Únete a nuestra comunidad de héroes anónimos.
                     </p>
-                    
+                   
                     <!-- Botones principales -->
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center animate__animated animate__fadeIn animate__delay-2s">
                         <a href="/register" class="btn btn-light btn-custom btn-lg btn-primary-custom">
@@ -77,6 +78,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Stats Section -->
     <section class="py-5 bg-white">
@@ -102,12 +104,13 @@
         </div>
     </section>
 
+
     <!-- Features Section -->
     <section id="como-funciona" class="py-5 bg-light">
         <div class="container py-5">
             <h2 class="text-center section-title">¿Cómo funciona?</h2>
             <p class="text-center lead mb-5">El proceso de donación es simple, seguro y salva vidas</p>
-            
+           
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="feature-card p-4 text-center">
@@ -140,12 +143,13 @@
         </div>
     </section>
 
+
     <!-- Blood Types Section -->
     <section id="tipos-sangre" class="blood-types-section py-5">
         <div class="container py-5">
             <h2 class="text-center section-title">Tipos de Sangre</h2>
             <p class="text-center lead mb-5">Todos los tipos sanguíneos son necesarios</p>
-            
+           
             <div class="row g-4">
                 <div class="col-md-2 col-4 text-center">
                     <div class="blood-type">A+</div>
@@ -180,7 +184,7 @@
                     <small>1% población</small>
                 </div>
             </div>
-            
+           
             <div class="alert alert-danger mt-5 text-center">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 <strong>Los tipos O- y AB+ son especialmente necesarios.</strong> O- es el donante universal y AB+ el receptor universal.
@@ -188,54 +192,93 @@
         </div>
     </section>
 
+
     <!-- Donation Centers -->
     <section id="centros" class="py-5 bg-white">
         <div class="container py-5">
             <h2 class="text-center section-title">Centros de Donación</h2>
             <p class="text-center lead mb-5">Encuentra el centro más cercano a ti</p>
-            
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="feature-card p-4">
-                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Centro Principal</h4>
-                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Av. Principal 123, Ciudad</p>
-                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Lunes a Viernes: 8AM - 6PM</p>
-                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7890</p>
-                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
-                    </div>
+           
+            <% if (healthCenters && healthCenters.length > 0) { %>
+                <div class="row g-4">
+                    <% healthCenters.forEach(center => { %>
+                        <div class="col-md-4">
+                            <div class="feature-card p-4">
+                                <h4 class="text-danger">
+                                    <i class="bi bi-hospital me-2"></i> <%= center.name %>
+                                </h4>
+                                <p class="mb-2">
+                                    <i class="bi bi-geo-alt text-danger"></i> <%= center.address %>, <%= center.city %>
+                                </p>
+                                <p class="mb-2">
+                                    <i class="bi bi-telephone text-danger"></i> <%= center.contact_phone || 'No disponible' %>
+                                </p>
+                                <a href="#"
+                                   class="btn btn-outline-danger btn-sm"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#mapModal"
+                                   onclick="loadMap('<%= center.address %>')">
+                                   Ver en mapa
+                                </a>
+                            </div>
+                        </div>
+                    <% }); %>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card p-4">
-                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Hospital Central</h4>
-                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Calle Secundaria 456, Ciudad</p>
-                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Lunes a Sábado: 7AM - 7PM</p>
-                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7891</p>
-                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="feature-card p-4">
-                        <h4 class="text-danger"><i class="bi bi-hospital me-2"></i> Clínica Norte</h4>
-                        <p class="mb-2"><i class="bi bi-geo-alt text-danger"></i> Av. Norte 789, Ciudad</p>
-                        <p class="mb-2"><i class="bi bi-clock text-danger"></i> Martes a Domingo: 9AM - 5PM</p>
-                        <p class="mb-3"><i class="bi bi-telephone text-danger"></i> (123) 456-7892</p>
-                        <a href="#" class="btn btn-outline-danger btn-sm">Ver en mapa</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-danger">Ver todos los centros</a>
-            </div>
+            <% } else { %>
+                <p class="text-center text-muted">No hay centros de donación disponibles en este momento.</p>
+            <% } %>
         </div>
     </section>
+
+
+    <!-- Modal para mostrar el mapa -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Ubicación del Centro Médico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="mapIframe"
+                            src=""
+                            width="100%"
+                            height="400"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Función para cargar el mapa en el iframe
+        function loadMap(address) {
+            const mapIframe = document.getElementById('mapIframe');
+            const encodedAddress = encodeURIComponent(address);
+            const apiKey = 'AIzaSyAYE1eO3CKsfGf2sj1xZjCliCgW5ZUaHCs';
+            const fallbackUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+
+
+            // Try to use the API key, fallback to a basic URL if unauthorized
+            mapIframe.src = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodedAddress}`;
+            mapIframe.onerror = () => {
+                mapIframe.src = fallbackUrl;
+            };
+        }
+    </script>
+
 
     <!-- Testimonials -->
     <section id="testimonios" class="py-5 bg-light">
         <div class="container py-5">
             <h2 class="text-center section-title">Testimonios</h2>
             <p class="text-center lead mb-5">Lo que dicen nuestros donantes</p>
-            
+           
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="testimonial-card bg-white p-4">
@@ -283,6 +326,7 @@
         </div>
     </section>
 
+
     <!-- CTA Section -->
     <section class="py-5 bg-danger text-white">
         <div class="container py-4 text-center">
@@ -293,6 +337,7 @@
             </a>
         </div>
     </section>
+
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-5">
@@ -336,6 +381,8 @@
                     </ul>
                 </div>
             </div>
+
+
             <hr class="my-4">
             <div class="text-center">
                 <p class="mb-0 small">© 2025 SangreVital - Todos los derechos reservados</p>
@@ -343,9 +390,41 @@
         </div>
     </footer>
 
+    <!-- Chatbox -->
+    <div id="chatbot-container" class="chatbot-container">
+        <div class="chat-header bg-danger text-white d-flex justify-content-between align-items-center p-3">
+            <span><i class="bi bi-robot me-2"></i> Asistente SangreVital</span>
+            <button class="btn-close btn-close-white"></button>
+        </div>
+        <div class="chat-body p-3" id="chat-body">
+            <div class="message bot">Hola 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte?</div>
+        </div>
+        <div class="quick-replies px-3 pb-2">
+            <button class="quick-btn" onclick="quickReply('¿Dónde puedo donar sangre?')">
+                <i class="bi bi-geo-alt me-1"></i> Centros
+            </button>
+            <button class="quick-btn" onclick="quickReply('¿Qué requisitos necesito para donar?')">
+                <i class="bi bi-check-circle me-1"></i> Requisitos
+            </button>
+            <button class="quick-btn" onclick="quickReply('¿Cada cuánto puedo donar sangre?')">
+                <i class="bi bi-calendar me-1"></i> Frecuencia
+            </button>
+        </div>
+        <div class="chat-input d-flex border-top p-2">
+            <input type="text" class="form-control rounded-pill me-2" id="userInput" placeholder="Escribe tu mensaje...">
+            <button class="btn btn-danger rounded-circle" onclick="sendMessage()" style="width: 40px; height: 40px;">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir el chat -->
+    <button id="chat-toggle" class="btn btn-danger rounded-circle shadow" style="width: 60px; height: 60px; position: fixed; bottom: 20px; right: 20px;">
+        <i class="bi bi-chat-dots fs-5"></i>
+    </button>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
         // Navbar scroll effect
         window.addEventListener('scroll', function() {
@@ -356,17 +435,167 @@
                 navbar.classList.remove('scrolled');
             }
         });
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
             });
         });
     </script>
+
+    <script>
+        // Variables globales
+        let conversationHistory = [
+            { role: 'assistant', content: 'Hola 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte?' }
+        ];
+
+        // Función para alternar la visibilidad del chat
+        function toggleChat() {
+            const container = document.getElementById('chatbot-container');
+            const toggleBtn = document.getElementById('chat-toggle');
+            
+            container.classList.toggle('visible');
+            
+            // Cambiar ícono del botón toggle
+            if (container.classList.contains('visible')) {
+                toggleBtn.innerHTML = '<i class="bi bi-x"></i>';
+                toggleBtn.classList.remove('new-message');
+            } else {
+                toggleBtn.innerHTML = '<i class="bi bi-chat-dots"></i>';
+            }
+            
+            // Mostrar/ocultar botones rápidos
+            const quickReplies = document.querySelector('.quick-replies');
+            if (quickReplies) {
+                quickReplies.style.display = container.classList.contains('visible') ? 'flex' : 'none';
+            }
+        }
+
+        // Función para respuestas rápidas
+        function quickReply(message) {
+            const input = document.getElementById('userInput');
+            input.value = message;
+            input.focus();
+            setTimeout(() => sendMessage(), 300);
+        }
+
+        // Función para mostrar notificación
+        function showNotification() {
+            const toggleBtn = document.getElementById('chat-toggle');
+            if (!document.getElementById('chatbot-container').classList.contains('visible')) {
+                toggleBtn.classList.add('new-message');
+                toggleBtn.innerHTML = '<i class="bi bi-chat-dots-fill"></i>';
+            }
+        }
+
+        // Función para autoscroll
+        function scrollToBottom(behavior = 'smooth') {
+            const chatBody = document.getElementById('chat-body');
+            chatBody.scrollTo({
+                top: chatBody.scrollHeight,
+                behavior: behavior
+            });
+        }
+
+        // Función principal para enviar mensajes
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatBody = document.getElementById('chat-body');
+            
+            // Mostrar mensaje del usuario
+            chatBody.innerHTML += `<div class="message user">${message}</div>`;
+            input.value = '';
+            scrollToBottom('auto');
+            
+            // Mostrar indicador de typing
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message bot typing';
+            typingIndicator.innerHTML = '<i class="bi bi-three-dots"></i>';
+            chatBody.appendChild(typingIndicator);
+            scrollToBottom();
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        history: conversationHistory
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Error en la respuesta del servidor');
+                }
+
+                const data = await response.json();
+                
+                if (!data.reply) {
+                    throw new Error('Respuesta inesperada del servidor');
+                }
+                
+                // Actualizar chat
+                chatBody.removeChild(typingIndicator);
+                chatBody.innerHTML += `<div class="message bot">${data.reply}</div>`;
+                conversationHistory = data.history || conversationHistory;
+                
+                // Mostrar notificación si el chat está cerrado
+                if (!document.getElementById('chatbot-container').classList.contains('visible')) {
+                    showNotification();
+                }
+                
+            } catch (error) {
+                console.error('Error en sendMessage:', error);
+                
+                if (typingIndicator && chatBody.contains(typingIndicator)) {
+                    chatBody.removeChild(typingIndicator);
+                }
+                
+                chatBody.innerHTML += `
+                    <div class="message bot error">
+                        ${error.message.replace(/</g, '&lt;')}
+                    </div>`;
+            } finally {
+                scrollToBottom();
+            }
+        }
+
+        // Inicialización cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar el botón de toggle
+            document.getElementById('chat-toggle').addEventListener('click', toggleChat);
+            
+            // Configurar el botón de cierre
+            document.querySelector('.chat-header .btn-close').addEventListener('click', toggleChat);
+            
+            // Configurar el input para enviar con Enter
+            document.getElementById('userInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Cargar historial desde localStorage si existe
+            const savedChat = localStorage.getItem('sangrevital_chat_history');
+            if (savedChat) {
+                try {
+                    conversationHistory = JSON.parse(savedChat);
+                    // Reconstruir el chat visual si es necesario
+                } catch (e) {
+                    console.error('Error al cargar historial:', e);
+                }
+            }
+        });
+    </script>
+
 </body>
 </html>
+``` 

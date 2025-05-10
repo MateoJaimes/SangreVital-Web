@@ -156,3 +156,258 @@ body {
     position: relative;
     z-index: 1;
 }
+
+
+/*-----------------------CHATBOX------------------------*/
+/* Variables de color conservando tus valores originales */
+:root {
+  --color-primary: #256bec;
+  --color-secondary: #2b3648;
+  --color-light: #f8f9fa;
+  --color-dark: #212529;
+  --color-success: #28a745;
+  --color-danger: #2934d8;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Botón flotante - Mejorado con transiciones suaves */
+#chat-toggle {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+  width: 60px;
+  height: 60px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  border: none;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+#chat-toggle:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 6px 16px rgba(37, 107, 236, 0.3);
+}
+
+#chat-toggle.new-message::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 12px;
+  height: 12px;
+  background: #ff4757;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+}
+
+/* Contenedor principal - Mejor estructura visual */
+.chatbot-container {
+  position: fixed;
+  bottom: 95px;
+  right: 25px;
+  width: 350px;
+  max-height: 70vh;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease-out;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.chatbot-container.visible {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cabecera - Más compacta y alineada */
+.chat-header {
+  background: var(--color-primary);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  position: relative;
+}
+
+.chatbot-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--color-primary);
+}
+
+/* Cuerpo del chat - Mejor manejo del espacio */
+.chat-body {
+  flex: 1;
+  padding: 12px 16px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #f8f9fa;
+}
+
+/* Mensajes - Mejor jerarquía visual */
+.message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  position: relative;
+  animation: fadeIn 0.25s ease-out;
+  word-wrap: break-word;
+  box-shadow: var(--shadow-sm);
+}
+
+.message.bot {
+  background: white;
+  color: var(--color-dark);
+  align-self: flex-start;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-bottom-left-radius: 4px;
+}
+
+.message.user {
+  background: var(--color-primary);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Área de entrada - Más compacta */
+.chat-input {
+  display: flex;
+  padding: 10px 12px;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  align-items: center;
+}
+
+.chat-input input {
+  flex: 1;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 18px;
+  padding: 8px 14px;
+  margin-right: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.chat-input input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.chat-input button {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* Botones rápidos - Mejor distribución */
+.quick-replies {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  flex-wrap: wrap;
+}
+
+.quick-replies button {
+  background: rgba(37, 107, 236, 0.08);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 16px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quick-replies button i {
+  font-size: 0.8rem;
+}
+
+/* Efectos y animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.typing {
+  width: fit-content;
+  background: rgba(0,0,0,0.05);
+}
+
+.message.typing::after {
+  content: "...";
+  display: inline-block;
+  width: 1em;
+  animation: typing 1.5s infinite steps(4, end);
+}
+
+/* Scrollbar - Más discreta */
+.chat-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+/* Responsive - Mejor adaptación */
+@media (max-width: 480px) {
+  .chatbot-container {
+    width: 90%;
+    right: 5%;
+    bottom: 80px;
+    max-height: 60vh;
+  }
+  
+  .quick-replies {
+    padding: 6px 8px;
+  }
+  
+  .quick-replies button {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+}
