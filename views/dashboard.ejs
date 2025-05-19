@@ -161,7 +161,21 @@
                     <ul class="list-unstyled">
                         <li class="mb-2"><i class="bi bi-envelope me-2 text-danger"></i> <%= donor.email || 'No disponible' %></li>
                         <li class="mb-2"><i class="bi bi-geo-alt me-2 text-danger"></i> <%= donor.address || 'No disponible' %></li>
-                        <li class="mb-2"><i class="bi bi-calendar me-2 text-danger"></i> <%= donor.birth_date || 'No disponible' %></li>
+                        <li class="mb-2">
+                            <i class="bi bi-calendar me-2 text-danger"></i>
+                            <% 
+                                function formatDate(dateStr) {
+                                    if (!dateStr) return 'No disponible';
+                                    const d = new Date(dateStr);
+                                    if (isNaN(d)) return 'No disponible';
+                                    const day = String(d.getDate()).padStart(2, '0');
+                                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                                    const year = d.getFullYear();
+                                    return `${day}/${month}/${year}`;
+                                }
+                            %>
+                            <%= formatDate(donor.birth_date) %>
+                        </li>
                     </ul>
                     
                     <a href="/edit-profile" class="btn btn-sangre w-100 mt-3">
@@ -230,13 +244,13 @@
                                 <span><%= donor.donations_this_year || 0 %>/4</span>
                             </div>
                             <div class="progress donation-progress">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: <%= ((donor.donations_this_year || 0) / 4) * 100 %>%"></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width:<%= ((donor.donations_this_year || 0) / 4) * 100 %>"></div>
                             </div>
                         </div>
                         
                         <div class="alert alert-danger bg-opacity-10 border-danger">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i> 
-                            ¡Faltan 2 donaciones para alcanzar tu meta anual!
+                            ¡Faltan <%= (4-(donor.donations_this_year || 0)) %> donaciones para alcanzar tu meta anual!
                         </div>
                     </div>
                 </div>
