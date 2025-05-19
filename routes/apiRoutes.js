@@ -23,7 +23,9 @@ router.post('/chat', async (req, res) => {
                         "- Beneficios del proceso " +
                         "- Centros de donación autorizados " +
                         "Mantén respuestas en español, claras y menores a 50 palabras. " +
-                        "Si la pregunta no está relacionada, redirige amablemente al tema."
+                        "Si la pregunta no está relacionada, redirige amablemente al tema."+
+                        "Cuando respondas con iteraciones, hazlas haciendo un salto de linea y enumeradas."+
+                        "cuando sea necesario excede las respuestas hasta 100 palabras."
             },
             ...(req.body.history || []),
             { 
@@ -48,8 +50,23 @@ router.post('/chat', async (req, res) => {
         });
 
         // 4. Procesar respuesta
-        const botReply = response.data.choices[0].message.content;
-        
+        let botReply = response.data.choices[0].message.content;
+
+        // Mejorar formato: saltos de línea para enumeraciones, listas y oraciones
+        botReply = botReply
+            // Salto de línea antes de enumeraciones tipo "1. ", "2. ", etc. (incluso si están pegadas al texto)
+            .replace(/\s?(\d+\.\s)/g, '\n$1')
+            // Salto de línea antes de viñetas tipo "- " o "• "
+            .replace(/\s?([-•]\s)/g, '\n$1')
+            // Salto de línea antes de palabras en negrita (doble asterisco)
+            .replace(/\s?(\*\*\w)/g, '\n$1')
+            // Salto de línea después de punto final, signo de exclamación o interrogación, seguido de espacio y cualquier carácter (excepto salto de línea)
+            .replace(/([\.!?])\s+(?=\S)/g, '$1\n')
+            // Eliminar saltos de línea dobles innecesarios
+            .replace(/\n{2,}/g, '\n')
+            // Quitar salto de línea inicial si existe
+            .replace(/^\n+/, '');
+
         // 5. Filtrar respuestas no relacionadas
         const finalReply = botReply.includes("donación") || 
                           botReply.includes("sangre") || 
