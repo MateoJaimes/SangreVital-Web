@@ -8,7 +8,7 @@ const db = require('../config/db');
 // Página de inicio
 router.get('/', async (req, res) => {
     try {
-        const result = await db.query('SELECT name, address, city, contact_phone FROM health_centers');
+        const result = await db.query('SELECT name, address, code_city, contact_phone FROM health_centers');
         const healthCenters = result.rows;
         res.render('index', { healthCenters });
     } catch (error) {
@@ -29,7 +29,7 @@ router.post('/login', authController.loginUser);
 router.get('/logout', authController.logout);
 
 // Completar perfil
-router.get('/complete-profile/:id', isAuthenticated, authController.showCompleteProfileForm);
+router.get('/complete-profile/:id', authController.showCompleteProfileForm);
 router.post('/complete-profile', isAuthenticated, authController.saveDonanteData);
 
 // Editar perfil
@@ -40,5 +40,9 @@ router.post('/edit-profile', isAuthenticated, authController.updateProfile);
 router.get('/dashboard', isAuthenticated, (req, res, next) => {
     authController.showDashboard(req, res, next);
 });
+
+// Health Questionnaire
+router.get('/health-questionnaire', isAuthenticated, authController.showHealthQuestionnaireForm);
+router.post('/health-questionnaire', isAuthenticated, authController.saveHealthQuestionnaire);
 
 module.exports = router;

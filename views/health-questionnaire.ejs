@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuestionario de Salud - SangreVital</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts - Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sangre-primary: #dc3545;
+      --sangre-secondary: #f8d7da;
+      --sangre-dark: #c82333;
+      --sangre-light: #f8f9fa;
+      --sangre-card-shadow: 0 4px 20px rgba(220, 53, 69, 0.1);
+    }
+    
+    body {
+      background-color: #fefefe;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      background-size: 300px;
+      background-attachment: fixed;
+      background-color: rgba(255,255,255,0.9);
+      background-blend-mode: overlay;
+    }
+
+    .navbar-sangre {
+      background: linear-gradient(135deg, var(--sangre-primary) 0%, var(--sangre-dark) 100%);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+      padding: 0.8rem 0;
+    }
+
+    .questionnaire-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 0;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--sangre-card-shadow);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(220, 53, 69, 0.15);
+    }
+
+    .section-header {
+      color: var(--sangre-primary);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--sangre-primary);
+      border-radius: 3px;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      transition: all 0.3s;
+      margin-bottom: 1rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--sangre-primary);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+
+    .form-check-input:checked {
+      background-color: var(--sangre-primary);
+      border-color: var(--sangre-primary);
+    }
+
+    .form-check-label {
+      font-weight: 400;
+    }
+
+    .btn-sangre {
+      background-color: var(--sangre-primary);
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .btn-sangre:hover {
+      background-color: var(--sangre-dark);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+    }
+
+    .page-title {
+      font-weight: 600;
+      color: var(--sangre-primary);
+      text-align: center;
+      margin: 1.5rem 0;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--sangre-primary);
+      border-radius: 3px;
+    }
+
+    .alert-custom {
+      background: rgba(220, 53, 69, 0.08);
+      border-left: 4px solid var(--sangre-primary);
+      border-radius: 8px;
+      color: #333;
+      grid-column: 1 / -1;
+    }
+
+    .question-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .question-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    /* Ajustes específicos para Montserrat */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .questionnaire-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      
+      .page-title {
+        font-size: 1.75rem;
+        margin: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-sangre">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/dashboard">
+        <i class="bi bi-droplet-fill"></i> SangreVital
+      </a>
+      <div class="d-flex align-items-center">
+        <a href="/dashboard" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-arrow-left"></i> Volver
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">Cuestionario de Salud</h1>
+    
+    <form action="/health-questionnaire" method="POST">
+      <input type="hidden" name="id" value="<%= userId %>">
+      
+      <div class="questionnaire-container">
+        <% if (error) { %>
+          <div class="alert alert-custom mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error %>
+          </div>
+        <% } %>
+
+        <!-- Columna 1: Estado de Salud -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-heart-pulse"></i> Estado de Salud
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="feels_good" name="feels_good">
+              <label class="form-check-label" for="feels_good">¿Te sientes bien hoy?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="had_fever" name="had_fever">
+              <label class="form-check-label" for="had_fever">¿Fiebre en últimos 14 días?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="had_covid" name="had_covid">
+              <label class="form-check-label" for="had_covid">¿COVID-19 reciente?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="current_medications" class="form-label">Medicamentos actuales</label>
+            <input type="text" class="form-control" id="current_medications" name="current_medications">
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="pregnant" name="pregnant">
+              <label class="form-check-label" for="pregnant">¿Embarazada?</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna 2: Vacunación -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-syringe"></i> Vacunación
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="recently_vaccinated" name="recently_vaccinated">
+              <label class="form-check-label" for="recently_vaccinated">¿Vacunado recientemente?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="vaccine_type" class="form-label">Tipo de vacuna</label>
+            <input type="text" class="form-control" id="vaccine_type" name="vaccine_type">
+          </div>
+          
+          <div class="question-item">
+            <label for="vaccine_date" class="form-label">Fecha de vacunación</label>
+            <input type="date" class="form-control" id="vaccine_date" name="vaccine_date">
+          </div>
+          
+          <div class="question-item">
+            <label for="chronic_conditions" class="form-label">Condiciones crónicas</label>
+            <input type="text" class="form-control" id="chronic_conditions" name="chronic_conditions">
+          </div>
+        </div>
+
+        <!-- Columna 3: Historial Médico -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-clipboard2-pulse"></i> Historial Médico
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="hepatitis" name="hepatitis">
+              <label class="form-check-label" for="hepatitis">¿Hepatitis?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="hiv" name="hiv">
+              <label class="form-check-label" for="hiv">¿VIH?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="tuberculosis" name="tuberculosis">
+              <label class="form-check-label" for="tuberculosis">¿Tuberculosis?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="recent_surgeries" name="recent_surgeries">
+              <label class="form-check-label" for="recent_surgeries">¿Cirugías recientes?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="surgery_date" class="form-label">Fecha de cirugía</label>
+            <input type="date" class="form-control" id="surgery_date" name="surgery_date">
+          </div>
+        </div>
+
+        <!-- Columna 4: Transfusiones y Condiciones -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-droplet"></i> Transfusiones
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="received_blood_transfusion" name="received_blood_transfusion">
+              <label class="form-check-label" for="received_blood_transfusion">¿Transfusión sanguínea?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="serious_conditions" class="form-label">Otras condiciones graves</label>
+            <input type="text" class="form-control" id="serious_conditions" name="serious_conditions">
+          </div>
+          
+          <h3 class="section-header mt-4">
+            <i class="bi bi-airplane"></i> Viajes Recientes
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="traveled_risk_area" name="traveled_risk_area">
+              <label class="form-check-label" for="traveled_risk_area">¿Viaje a zonas de riesgo?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="visited_countries" class="form-label">Países visitados</label>
+            <input type="text" class="form-control" id="visited_countries" name="visited_countries">
+          </div>
+        </div>
+
+        <!-- Columna 5: Conductas de Riesgo -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-exclamation-triangle"></i> Conductas de Riesgo
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="risky_sexual_behaviors" name="risky_sexual_behaviors">
+              <label class="form-check-label" for="risky_sexual_behaviors">¿Conductas sexuales de riesgo?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="tattoos_or_piercings" name="tattoos_or_piercings">
+              <label class="form-check-label" for="tattoos_or_piercings">¿Tatuajes/piercings recientes?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="tattoo_date" class="form-label">Fecha de tatuaje/piercing</label>
+            <input type="date" class="form-control" id="tattoo_date" name="tattoo_date">
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="intravenous_drugs" name="intravenous_drugs">
+              <label class="form-check-label" for="intravenous_drugs">¿Drogas intravenosas?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="contact_with_diseases" name="contact_with_diseases">
+              <label class="form-check-label" for="contact_with_diseases">¿Contacto con enfermedades infecciosas?</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna 6: Historial de Donación -->
+        <div class="form-section">
+          <h3 class="section-header">
+            <i class="bi bi-clipboard2-check"></i> Historial de Donación
+          </h3>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="donated_before" name="donated_before">
+              <label class="form-check-label" for="donated_before">¿Has donado antes?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="last_donation_date" class="form-label">Fecha de última donación</label>
+            <input type="date" class="form-control" id="last_donation_date" name="last_donation_date">
+          </div>
+          
+          <div class="question-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="had_reactions" name="had_reactions">
+              <label class="form-check-label" for="had_reactions">¿Reacciones al donar?</label>
+            </div>
+          </div>
+          
+          <div class="question-item">
+            <label for="reaction_type" class="form-label">Tipo de reacción</label>
+            <input type="text" class="form-control" id="reaction_type" name="reaction_type">
+          </div>
+        </div>
+        
+        <!-- Botón de envío -->
+        <div class="form-section" style="grid-column: 1 / -1;">
+          <button type="submit" class="btn btn-sangre">
+            <i class="bi bi-check-circle-fill"></i> Guardar Cuestionario
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
