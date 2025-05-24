@@ -5,3 +5,10 @@ module.exports.isAuthenticated = (req, res, next) => {
   }
   res.redirect('/login');
 };
+
+exports.ensureHealthCenterAuthenticated = (req, res, next) => {
+    if (req.session && req.session.healthCenter) {
+        return next();
+    }
+    res.redirect('/health-center/login');
+};

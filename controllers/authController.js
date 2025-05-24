@@ -121,7 +121,7 @@ exports.showCompleteProfileForm = async (req, res) => {
 exports.saveDonanteData = async (req, res) => {
   const {
     id, first_name, second_name, last_name, second_last_name,
-    blood_type, birth_date, address, code_city // state is ignored
+    gender, blood_type, birth_date, address, code_city // state is ignored
   } = req.body;
 
   try {
@@ -131,21 +131,21 @@ exports.saveDonanteData = async (req, res) => {
     if (donorExists.rows.length === 0) {
       // INSERT en donors
       await db.query(`INSERT INTO donors (
-        id, first_name, second_name, last_name, second_last_name, blood_type, birth_date, address, code_city
+        id, first_name, second_name, last_name, second_last_name, gender, blood_type, birth_date, address, code_city
       ) VALUES (
-        UPPER($1), UPPER($2), UPPER($3), UPPER($4), UPPER($5), UPPER($6), $7, UPPER($8), UPPER($9)
+        UPPER($1), UPPER($2), UPPER($3), UPPER($4), UPPER($5), $6, UPPER($7), $8, UPPER($9), UPPER($10)
       )`,
-        [id, first_name, second_name, last_name, second_last_name, blood_type, birth_date, address, code_city]
+        [id, first_name, second_name, last_name, second_last_name, gender, blood_type, birth_date, address, code_city]
       );
     } else {
       // UPDATE si ya existe (opcional)
       await db.query(`UPDATE donors SET
         first_name = UPPER($1), second_name = UPPER($2), last_name = UPPER($3),
-        second_last_name = UPPER($4), blood_type = UPPER($5),
-        birth_date = $6, address = UPPER($7), code_city = UPPER($8),
+        second_last_name = UPPER($4), gender = $5, blood_type = UPPER($6),
+        birth_date = $7, address = UPPER($8), code_city = UPPER($9),
         updated_at = CURRENT_TIMESTAMP
-        WHERE id = UPPER($9)`,
-        [first_name, second_name, last_name, second_last_name, blood_type, birth_date, address, code_city, id]
+        WHERE id = UPPER($10)`,
+        [first_name, second_name, last_name, second_last_name, gender, blood_type, birth_date, address, code_city, id]
       );
     }
 
